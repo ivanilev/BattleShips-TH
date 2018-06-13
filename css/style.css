@@ -1,0 +1,10 @@
+html, body, div {
+    padding: 0px;
+    margin: 0px;
+}
+td {
+    /* border: 1px solid black; */
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
