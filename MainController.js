@@ -9,25 +9,6 @@ var MainController = (function(){
         let cell = $('table > tr:nth-child(' + (position.x+2) + ') > td:nth-child(' + (position.y+2) + ')');
         cell.text(value);
     }
-    function RenderBoard(){
-        //For each table cell -> 
-        //Check if it's hit and if there's a ship 
-        //Render value accordingly 
-        for (let x = 0; x < 10; x++){
-            for (let y = 0; y < 10; y++){
-                let _val = '.';
-                if(_board.GameBoard[x][y].isHit){
-                    if (_board.GameBoard[x][y].isShipHere){
-                        _val = 'X';
-                    }
-                    else{
-                        _val = '-';
-                    }
-                }
-                RenderPosition({x,y}, _val);
-            }
-        }
-    }
 
     //public functions
     function Show(){
@@ -72,15 +53,25 @@ var MainController = (function(){
             //Transform 'e9' to {x,y} position
             let pos = Utilities.ParseToXY(input);
             
-            //Set changes
-            _board.GameBoard[pos.x][pos.y].isHit = true;
+            //Get target by value
+            let _target = _board.GameBoard[pos.x].find(row => row.position.y === pos.y);
+            
+            //Hit it
+            _target.isHit = true;
+              
+            //if there's a ship -> (X), else -> (-)
+            let _symbolToRedner = _target.isShipHere ? 'X' : '-';
+
+            //Render the symbol in the targeted position
+            RenderPosition(_target.position, _symbolToRedner);
+
+            //Set target in board since it was passed by value
+            _board.GameBoard[pos.x][pos.y] = _target;
 
             if(this.isGameOver()){
                 alert('Game Over! You won in: ' + _counter + ' tries!');
             }
         }
-        //Render
-        RenderBoard();
     }
 
     return{
